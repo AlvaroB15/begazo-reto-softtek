@@ -1,0 +1,280 @@
+openapi: 3.0.1
+info:
+  title: Reto-Softtek
+  description: "\n### Los try Out de la parte inferior de cada endpoint funcionan correctamente solo de la URL DEL SWAGGER DEPLOYADO, que esta en el README.md, tanto en la version 3 y 2"
+  version: 1.0.0
+
+externalDocs:
+  description: Repo de los lambdas
+  url: https://github.com/AlvaroB15/reto-softtek
+
+servers:
+  - url: https://d84p3k3653.execute-api.us-east-1.amazonaws.com/dev
+
+tags:
+  - name: swapi
+    description: Consultas al api de Swapi.
+  - name: people
+    description: Consultas del listado de personas con Dynamo.
+  - name: person
+    description: Consultas para registro y listado de personas con Dynamo.
+
+paths:
+  /swapi/people:
+    get:
+      tags:
+        - swapi
+      summary: lista Personas de Swapi
+      parameters:
+        - name: lan
+          in: query
+          description: Choose Language (es||en)
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                      error:
+                        type: boolean
+                      message:
+                        type: string
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SwappiPeople'
+                  status:
+                    type: number
+  /swapi/planet:
+    get:
+      tags:
+        - swapi
+      summary: lista planetas de Swapi
+      parameters:
+        - name: lan
+          in: query
+          description: Choose Language (es||en)
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                      error:
+                        type: boolean
+                      message:
+                        type: string
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SwappiPlanet'
+                  status:
+                    type: number
+  /person:
+    get:
+      tags:
+        - person
+      summary: Listar persona con un id en DynamoDB
+      parameters:
+        - name: id
+          in: query
+          description: Id Person
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/DataPerson'
+                  status:
+                    type: string
+    post:
+      tags:
+        - person
+      summary: Registrar persona en DynamoDB
+      requestBody:
+        description: Crear una persona a dynamodb
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                      error:
+                        type: boolean
+                      message:
+                        type: string
+                      data:
+                        $ref: '#/components/schemas/DataPerson'
+                  status:
+                    type: number
+
+  /people:
+    get:
+      tags:
+        - people
+      summary: Obtener todas las personas en DynamoDB
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DataPerson'
+                  status:
+                    type: number
+components:
+  schemas:
+    DataPerson:
+      type: object
+      properties:
+        id:
+          type: string
+        nombre:
+          type: string
+        genero:
+          type: string
+        planetaOrigen:
+          type: string
+        fechaRegistro:
+          type: string
+    Person:
+      type: object
+      properties:
+        nombre:
+          type: string
+        genero:
+          type: string
+        planetaOrigen:
+          type: string
+    SwappiPeople:
+      type: object
+      properties:
+        nombre:
+          type: string
+        altura:
+          type: string
+        peso:
+          type: string
+        colorCabello:
+          type: string
+        tes:
+          type: string
+        colorOjos:
+          type: string
+        anioNacimiento:
+          type: string
+        genero:
+          type: string
+        planetaOrigen:
+          type: string
+        fechaRegistro:
+          type: string
+        fechaEdicion:
+          type: string
+        url:
+          type: string
+        peliculas:
+          type: array
+          items:
+            type: string
+        especies:
+          type: array
+          items:
+            type: string
+        vehiculos:
+          type: array
+          items:
+            type: string
+        navesEstelares:
+          type: array
+          items:
+            type: string
+    SwappiPlanet:
+      type: object
+      properties:
+        nombre:
+          type: string
+        periodoRotacion:
+          type: string
+        periodoOrbital:
+          type: string
+        diametro:
+          type: string
+        clima:
+          type: string
+        gravedad:
+          type: string
+        terreno:
+          type: string
+        superficieAgua:
+          type: string
+        poblacion:
+          type: string
+        fechaRegistro:
+          type: string
+        fechaEdicion:
+          type: string
+        url:
+          type: string
+        residentes:
+          type: array
+          items:
+            type: string
+        peliculas:
+          type: array
+          items:
+            type: string
